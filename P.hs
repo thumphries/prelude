@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 {-# LANGUAGE OverloadedStrings #-}
 module P (
@@ -154,6 +155,10 @@ import           Data.Tuple as Tuple (
 
 import qualified Debug.Trace as Trace
 
+#if MIN_VERSION_base(4,9,0)
+import           GHC.Stack (HasCallStack)
+#endif
+
 import           Prelude as Prelude (
            Enum (..)
          )
@@ -165,12 +170,20 @@ import           System.IO as IO (
          )
 
 
+#if MIN_VERSION_base(4,9,0)
+undefined :: HasCallStack => a
+#else
 undefined :: a
+#endif
 undefined =
   Unsafe.undefined
 {-# WARNING undefined "'undefined' is unsafe" #-}
 
+#if MIN_VERSION_base(4,9,0)
+error :: HasCallStack => [Char] -> a
+#else
 error :: [Char] -> a
+#endif
 error =
   Unsafe.error
 {-# WARNING error "'error' is unsafe" #-}
@@ -180,7 +193,11 @@ trace =
   Trace.trace
 {-# WARNING trace "'trace' should only be used while debugging" #-}
 
+#if MIN_VERSION_base(4,9,0)
 traceM :: Applicative f => [Char] -> f ()
+#else
+traceM :: Monad m => [Char] -> m ()
+#endif
 traceM =
   Trace.traceM
 {-# WARNING traceM "'traceM' should only be used while debugging" #-}
