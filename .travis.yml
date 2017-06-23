@@ -39,3 +39,13 @@ install:
 
 script:
  - ghc -Wall --make P.hs
+ - haddock --html -o dist/ P.hs
+
+deploy:
+  provider: pages
+  target_branch: gh-pages
+  skip_cleanup: true
+  local_dir: dist
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
