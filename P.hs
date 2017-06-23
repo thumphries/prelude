@@ -19,8 +19,6 @@ module P (
   , Int64
 
   -- * Algebraic structures
-  -- ** Semigroup
-  , Semigroup (..)
   -- ** Monoid
   , Monoid (..)
   -- ** Functor
@@ -143,9 +141,6 @@ import           Data.Ord as Ord (
            Ord (..)
          , Ordering (..)
          , comparing
-         )
-import           Data.Semigroup as Semigroup (
-           Semigroup (..)
          )
 import           Data.Traversable as Traversable (
            Traversable (..)
