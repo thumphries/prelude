@@ -38,4 +38,4 @@ install:
  - travis_retry cabal update -v
 
 script:
- - ghc -Wall --make Prelude.hs
+ - ghc -Wall --make P.hs
