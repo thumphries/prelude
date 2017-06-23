@@ -6,16 +6,20 @@ directly into projects.
 This is intended as a starting point for your project-specific
 Prelude.
 
-## Use case
+## Usage
 
-There are many alternative Preludes available on Github and
-Hackage. Personally, I prefer to avoid incurring dependencies for a
-module of aliases and re-exports. I also like to have a place to dump
-very general combinators as I come up with them. I decided to create a
-canonical Prelude to improve this workflow somewhat.
+Copy `P.hs` into your project. Feel free to rename it.
+
+Check it in, edit it however you like, and feel free to suggest robust
+changes via GitHub issues!
 
 ## Guidelines
 
+- Re-export from `base` only
+    - may also eventually allow libraries distributed with GHC
+- Unsafe exports must have `WARNING` pragmas
+    - Partial functions are only provided for interactive use
+- Maintain portability across three versions of GHC
+    - current compatibility window: 7.10, 8.0, 8.2
 - Whitelist, not blacklist
-- `base` only for now (may eventually allow libraries distributed with GHC)
-- Partial functions should have WARNING pragmas
+    - Breakage from upstream is unacceptable
