@@ -18,24 +18,40 @@ module P (
   , Int16
   , Int32
   , Int64
+  -- ** Word
+  , Word64
 
   -- * Algebraic structures
   -- ** Monoid
   , Monoid (..)
+  , (<>)
   -- ** Functor
   , Functor (..)
+  , (<$>)
+  , ($>)
+  , void
   -- ** Bifunctor
   , Bifunctor (..)
   -- ** Applicative
   , Applicative (..)
+  -- ** Alternative
+  , Alternative (..)
+  , asum
   -- ** Monad
   , Monad (..)
+  , join
+  -- ** MonadPlus
+  , MonadPlus (..)
+  , guard
+  , msum
 
   -- * Data structures
   -- ** Either
   , Either (..)
   -- ** Maybe
   , Maybe (..)
+  , fromMaybe
+  , maybe
   -- ** Tuple
   , fst
   , snd
@@ -47,6 +63,12 @@ module P (
   , Enum (..)
   -- ** Eq
   , Eq (..)
+  -- ** Read
+  , Read (..)
+  , readEither
+  , readMaybe
+  -- ** Show
+  , Show (..)
   -- ** Foldable
   , Foldable (..)
   -- ** Ord
@@ -65,6 +87,7 @@ module P (
   , flip
   , fix
   , on
+  , seq
 
   -- * System
   -- ** IO
@@ -84,9 +107,15 @@ module P (
 
 import           Control.Monad as Monad (
            Monad (..)
+         , MonadPlus (..)
+         , guard
+         , join
+         , msum
          )
 import           Control.Applicative as Applicative (
            Applicative (..)
+         , Alternative (..)
+         , empty
          )
 
 import           Data.Bifunctor as Bifunctor (
@@ -108,6 +137,7 @@ import           Data.Either as Either (
          )
 import           Data.Foldable as Foldable (
            Foldable (..)
+         , asum
          )
 import           Data.Function as Function (
            id
@@ -121,6 +151,9 @@ import           Data.Function as Function (
          )
 import           Data.Functor as Functor (
            Functor (..)
+         , (<$>)
+         , ($>)
+         , void
          )
 import           Data.Eq as Eq (
            Eq (..)
@@ -134,9 +167,12 @@ import           Data.Int as Int (
          )
 import           Data.Maybe as Maybe (
            Maybe (..)
+         , fromMaybe
+         , maybe
          )
 import           Data.Monoid as Monoid (
            Monoid (..)
+         , (<>)
          )
 import           Data.Ord as Ord (
            Ord (..)
@@ -152,6 +188,9 @@ import           Data.Tuple as Tuple (
          , curry
          , uncurry
          )
+import           Data.Word as Word (
+           Word64
+         )
 
 import qualified Debug.Trace as Trace
 
@@ -161,12 +200,22 @@ import           GHC.Stack (HasCallStack)
 
 import           Prelude as Prelude (
            Enum (..)
+         , seq
          )
 import qualified Prelude as Unsafe
 
 import           System.IO as IO (
            FilePath
          , IO
+         )
+
+import           Text.Read as Read (
+           Read (..)
+         , readEither
+         , readMaybe
+         )
+import           Text.Show as Show (
+           Show (..)
          )
 
 
