@@ -48,10 +48,12 @@ module P (
   -- * Data structures
   -- ** Either
   , Either (..)
+  , note
   -- ** Maybe
   , Maybe (..)
   , fromMaybe
   , maybe
+  , hush
   -- ** Tuple
   , fst
   , snd
@@ -255,3 +257,15 @@ traceIO :: [Char] -> IO ()
 traceIO =
   Trace.traceIO
 {-# WARNING traceIO "'traceIO' should only be used while debugging" #-}
+
+-- | Tag a 'Nothing'.
+note :: a -> Maybe b -> Either a b
+note a Nothing = Left a
+note _ (Just b) = Right b
+{-# INLINEABLE note #-}
+
+-- | Eliminate a 'Left'.
+hush :: Either a b -> Maybe b
+hush (Left _) = Nothing
+hush (Right b) = Just b
+{-# INLINEABLE hush #-}
