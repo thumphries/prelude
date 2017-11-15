@@ -13,6 +13,7 @@ module P (
   -- ** Char
   , Char
   -- ** Int
+  , Integer
   , Int
   , Int8
   , Int16
@@ -20,6 +21,9 @@ module P (
   , Int64
   -- ** Word
   , Word64
+  -- ** Real
+  , fromIntegral
+  , fromRational
 
   -- * Algebraic structures
   -- ** Monoid
@@ -30,10 +34,12 @@ module P (
   , (<$>)
   , ($>)
   , void
+  , with
   -- ** Bifunctor
   , Bifunctor (..)
   -- ** Applicative
   , Applicative (..)
+  , (<**>)
   -- ** Alternative
   , Alternative (..)
   , asum
@@ -48,6 +54,7 @@ module P (
   -- * Data structures
   -- ** Either
   , Either (..)
+  , either
   , note
   -- ** Maybe
   , Maybe (..)
@@ -63,6 +70,8 @@ module P (
   -- * Typeclasses
   -- ** Enum
   , Enum (..)
+  -- ** Num
+  , Num (..)
   -- ** Eq
   , Eq (..)
   -- ** Read
@@ -71,19 +80,27 @@ module P (
   , readMaybe
   -- ** Show
   , Show (..)
+  -- *** ShowS
+  , ShowS
+  , showString
   -- ** Foldable
   , Foldable (..)
+  , for_
+  , all
   -- ** Ord
   , Ord (..)
   , Ordering (..)
   , comparing
   -- ** Traversable
   , Traversable (..)
+  , for
+  , traverse_
 
   -- * Combinators
   , id
   , (.)
   , ($)
+  , ($!)
   , (&)
   , const
   , flip
@@ -116,6 +133,7 @@ import           Control.Monad as Monad (
          )
 import           Control.Applicative as Applicative (
            Applicative (..)
+         , (<**>)
          , Alternative (..)
          , empty
          )
@@ -136,10 +154,14 @@ import           Data.Char as Char (
          )
 import           Data.Either as Either (
            Either (..)
+         , either
          )
 import           Data.Foldable as Foldable (
            Foldable (..)
          , asum
+         , traverse_
+         , for_
+         , all
          )
 import           Data.Function as Function (
            id
@@ -147,7 +169,7 @@ import           Data.Function as Function (
          , ($)
          , (&)
          , const
-         , flip 
+         , flip
          , fix
          , on
          )
@@ -183,6 +205,7 @@ import           Data.Ord as Ord (
          )
 import           Data.Traversable as Traversable (
            Traversable (..)
+         , for
          )
 import           Data.Tuple as Tuple (
            fst
@@ -196,13 +219,20 @@ import           Data.Word as Word (
 
 import qualified Debug.Trace as Trace
 
+import           GHC.Real as Real (
+           fromIntegral
+         , fromRational
+         )
 #if MIN_VERSION_base(4,9,0)
 import           GHC.Stack (HasCallStack)
 #endif
 
 import           Prelude as Prelude (
            Enum (..)
+         , Num (..)
+         , Integer
          , seq
+         , ($!)
          )
 import qualified Prelude as Unsafe
 
@@ -218,6 +248,8 @@ import           Text.Read as Read (
          )
 import           Text.Show as Show (
            Show (..)
+         , ShowS
+         , showString
          )
 
 
@@ -257,6 +289,11 @@ traceIO :: [Char] -> IO ()
 traceIO =
   Trace.traceIO
 {-# WARNING traceIO "'traceIO' should only be used while debugging" #-}
+
+with :: Functor f => f a -> (a -> b) -> f b
+with =
+  flip fmap
+{-# INLINE with #-}
 
 -- | Tag a 'Nothing'.
 note :: a -> Maybe b -> Either a b
